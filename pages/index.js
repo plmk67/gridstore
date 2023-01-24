@@ -4,7 +4,6 @@ import { useAppContext } from "../context/AppContext";
 import { Button } from "@chakra-ui/react";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
-import Link from "next/link";
 
 export const getStaticProps = async () => {
   const res = await fetch("http://localhost:4000/api/products/");
