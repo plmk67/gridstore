@@ -1,7 +1,4 @@
 import Head from "next/head";
-import CartNotification from "../components/CartNotification";
-import { useAppContext } from "../context/AppContext";
-import { Button } from "@chakra-ui/react";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
 
@@ -15,12 +12,6 @@ export const getStaticProps = async () => {
 };
 
 export default function Home({ products }) {
-  const { isCartNotification, setIsCartNotification } = useAppContext();
-
-  const toggleCartNotification = () => {
-    setIsCartNotification(!isCartNotification);
-  };
-
   return (
     <>
       <Head>
@@ -41,11 +32,7 @@ export default function Home({ products }) {
               return <ProductCard product={product} index={index} />;
             })}
           </div>
-
-          <Button onClick={() => toggleCartNotification()}>Sidepanel</Button>
         </div>
-
-        <CartNotification />
       </main>
     </>
   );

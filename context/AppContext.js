@@ -7,24 +7,20 @@ export function useAppContext() {
 }
 
 export function AppWrapper({ children }) {
-  const [isCartNotification, setIsCartNotification] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.keyCode === 27) {
-        setIsCartNotification(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleEsc);
-
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
+    let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCartItems(cartItemsList);
   }, []);
 
   return (
-    <AppContext.Provider value={{ isCartNotification, setIsCartNotification }}>
+    <AppContext.Provider
+      value={{
+        cartItems,
+        setCartItems,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
