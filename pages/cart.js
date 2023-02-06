@@ -133,7 +133,7 @@ const cart = () => {
                             </Button>
                           </HStack>
                         </td>
-                        <td className="h-36 pt-2 align-top">${subtotal}</td>
+                        <td className="h-36 pt-2 align-top ">${subtotal}</td>
                       </tr>
                     );
                   })}

@@ -11,6 +11,7 @@ import {
 
 import { RiShoppingCart2Line } from "react-icons/ri";
 import { useAppContext } from "../context/AppContext";
+import CheckoutForm from "../components/CheckoutForm";
 
 const checkout = () => {
   const { cartItems, setCartItems } = useAppContext();
@@ -124,7 +125,9 @@ const checkout = () => {
               </AccordionItem>
             </Accordion>
           </div>
-          <div>Address Form Input</div>
+          <div className="pt-4">
+            <CheckoutForm />
+          </div>
         </div>
       </div>
     </div>
