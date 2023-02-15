@@ -38,7 +38,7 @@ export function AppWrapper({ children }) {
     //treat this for an onMountComponent()
     let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
     let cartQuantity = cartItemsList.reduce(
-      (total_quantity, item) => total_quantity + item.quantity,
+      (total_quantity, item) => Number(total_quantity) + Number(item.quantity),
       0
     );
     setCartItems(cartItemsList);

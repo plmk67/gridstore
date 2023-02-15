@@ -56,10 +56,9 @@ const cart = () => {
     setCartItems(updatedQuantity);
 
     let updatedCartQuantity = updatedQuantity.reduce(
-      (total_quantity, item) => total_quantity + item.quantity,
+      (total_quantity, item) => Number(total_quantity) + Number(item.quantity),
       0
     );
-
     setCartQuantity(updatedCartQuantity);
   };
 
@@ -69,7 +68,14 @@ const cart = () => {
     );
 
     localStorage.setItem("cart", JSON.stringify(removedItemList));
+
     setCartItems(removedItemList);
+
+    let updatedCartQuantity = removedItemList.reduce(
+      (total_quantity, item) => Number(total_quantity) + Number(item.quantity),
+      0
+    );
+    setCartQuantity(updatedCartQuantity);
   };
 
   return (
