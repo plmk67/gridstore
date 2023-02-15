@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../../../components/Header";
+import { useAppContext } from "../../../context/AppContext";
 import { useHttpClient } from "../../../components/http-hook";
 import {
   Button,
   CircularProgress,
-  useToast,
   Input,
   useNumberInput,
   HStack,
   Drawer,
-  DrawerBody,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
@@ -22,12 +20,13 @@ import Link from "next/link";
 
 const Product = (query) => {
   const { sendRequest, isLoading, setIsLoading } = useHttpClient();
+  const { error, setError } = useState(false);
+  const { cartQuantity, setCartQuantity } = useAppContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
+  const btnRef = useRef();
 
   const [product, setProduct] = useState({});
-  const toast = useToast();
   let id = query.query.id;
 
   const { description, image, product_name, price } = product;
@@ -38,6 +37,7 @@ const Product = (query) => {
       defaultValue: 1,
       min: 1,
       max: 25,
+      keepWithinRange: true,
     });
 
   const inc = getIncrementButtonProps();
@@ -65,28 +65,34 @@ const Product = (query) => {
   }, [id]);
 
   const AddToCart = (quantity) => {
-    let cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    //set minimal value as 1
+    if (quantity < 1) {
+      quantity = 1;
+    }
+
+    //grabs item from cookies
+    let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
     let item = { image, product_name, price, quantity };
-    let itemExists = cartItems.find(
+    let itemExists = cartItemsList.find(
       (item) => item.product_name === product_name
     );
+
     if (typeof itemExists !== "undefined") {
-      let index = cartItems.findIndex(
+      let index = cartItemsList.findIndex(
         (item) => item.product_name === product_name
       );
-      cartItems.splice(index, 1, item);
-      localStorage.setItem("cart", JSON.stringify(cartItems));
+      cartItemsList.splice(index, 1, item);
+      localStorage.setItem("cart", JSON.stringify(cartItemsList));
     } else {
-      cartItems.push(item);
-      localStorage.setItem("cart", JSON.stringify(cartItems));
+      cartItemsList.push(item);
+      localStorage.setItem("cart", JSON.stringify(cartItemsList));
     }
 
     onOpen();
   };
 
-  console.log(product_name);
-
   let retail_price = 0;
+
   if (price) {
     retail_price = price.toFixed(2);
   }
@@ -127,16 +133,20 @@ const Product = (query) => {
             </div>
             <div className="flex flex-col w-full md:w-3/5 md:pr-12 ">
               <div className="flex flex-row pb-4 md:pb-4">
-                <div className="flex flex-col justify-between w-1/2">
+                <div className="flex flex-col justify-between w-1/2 md:w-2/5">
                   <div className="pb-2 text-xs font-medium">Price</div>
                   <div>${retail_price}</div>
                 </div>
-                <div className="flex flex-col justify-between w-1/2">
-                  <div className="pb-2 text-xs font-medium"> Quantity</div>
+                <div className="flex flex-col justify-between w-1/2 md:w-3/5 ">
+                  <div className="pb-2 text-xs font-medium text-center">
+                    Quantity
+                  </div>
                   <div>
                     <HStack className="h-8">
-                      <Input size="sm" {...input} />
                       <Button {...dec}>-</Button>
+
+                      <Input className="text-center" {...input} width="auto" />
+
                       <Button {...inc}>+</Button>
                     </HStack>
                   </div>

@@ -3,16 +3,35 @@ import { useAppContext } from "../context/AppContext";
 import { HStack, Input, Button } from "@chakra-ui/react";
 import Header from "../components/Header";
 import Link from "next/link";
+import FeaturedCollection from "../components/FeaturedCollection";
+import { RiDeleteBinLine, RiArrowRightUpLine } from "react-icons/ri";
 
 const cart = () => {
   const { cartItems, setCartItems } = useAppContext();
+  const { cartQuantity, setCartQuantity } = useAppContext();
 
   useEffect(() => {
     let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
+    let cartQuantity = cartItemsList.reduce(
+      (total_quantity, item) => Number(total_quantity) + Number(item.quantity),
+      0
+    );
+
     setCartItems(cartItemsList);
+    setCartQuantity(cartQuantity);
   }, []);
 
   const handleChange = (value, product_name, action) => {
+    //min quantity value
+    if (value < 1) {
+      value = Number(1);
+    }
+
+    //max inventory value
+    if (value > 25) {
+      value = Number(25);
+    }
+
     let updatedQuantity = cartItems.map((item) => {
       if (item.product_name === product_name) {
         switch (action) {
@@ -33,16 +52,39 @@ const cart = () => {
         return item;
       }
     });
-
     localStorage.setItem("cart", JSON.stringify(updatedQuantity));
     setCartItems(updatedQuantity);
+
+    let updatedCartQuantity = updatedQuantity.reduce(
+      (total_quantity, item) => total_quantity + item.quantity,
+      0
+    );
+
+    setCartQuantity(updatedCartQuantity);
+  };
+
+  const deleteItem = (product_name) => {
+    let removedItemList = cartItems.filter(
+      (item) => item.product_name !== product_name
+    );
+
+    localStorage.setItem("cart", JSON.stringify(removedItemList));
+    setCartItems(removedItemList);
   };
 
   return (
     <>
       <Header />
       <div className="p-8 h-full w-full min-w-[500px]">
-        {cartItems.length === 0 && "is empty"}
+        {cartItems.length === 0 && (
+          <div className="flex flex-col justify-center items-center">
+            <div>Your shopping cart is empty</div>
+            <div className="flex flex-row items-center pt-8 hover:underline">
+              <Link href="/">Continue shopping</Link>
+              <RiArrowRightUpLine size={20} color="gray" />
+            </div>
+          </div>
+        )}
 
         {cartItems.length > 0 && (
           <div className="table-auto">
@@ -57,12 +99,15 @@ const cart = () => {
                   </th>
                   <th
                     scope="col"
-                    className="font-light  text-sm pr-4 sm:shrink-0 "
+                    className="font-light text-sm pr-4 sm:shrink-0 "
                   >
                     QUANTITY
                   </th>
                   <th scope="col" className="font-light text-sm">
                     TOTAL
+                  </th>
+                  <th scope="col" className="font-light text-center text-sm">
+                    REMOVE
                   </th>
                 </tr>
               </thead>
@@ -97,17 +142,8 @@ const cart = () => {
                         </td>
                         <td className="sm:shrink-0 align-top ">
                           <HStack maxW="320px" className="w-40">
-                            <Input
-                              type="number"
-                              className="w-8"
-                              value={quantity}
-                              onChange={() =>
-                                handleChange(event.target.value, product_name)
-                              }
-                              min="0"
-                              max="20"
-                            />
                             <Button
+                              isDisabled={quantity < 0}
                               colorScheme="gray"
                               onClick={() =>
                                 handleChange(
@@ -119,8 +155,19 @@ const cart = () => {
                             >
                               -
                             </Button>
+                            <input
+                              type="number"
+                              className="w-10 text-center"
+                              value={quantity}
+                              onChange={() =>
+                                handleChange(event.target.value, product_name)
+                              }
+                              min="1"
+                              max="25"
+                            />
                             <Button
                               colorScheme="gray"
+                              isDisabled={quantity >= 25}
                               onClick={() =>
                                 handleChange(
                                   event.target.value,
@@ -134,6 +181,14 @@ const cart = () => {
                           </HStack>
                         </td>
                         <td className="h-36 pt-2 align-top ">${subtotal}</td>
+                        <td className="h-36 pt-2 align-top text-center">
+                          <button
+                            className="h-15 w-15"
+                            onClick={() => deleteItem(product_name)}
+                          >
+                            <RiDeleteBinLine size={20} />
+                          </button>
+                        </td>
                       </tr>
                     );
                   })}
@@ -155,6 +210,9 @@ const cart = () => {
             </div>
           </div>
         )}
+        {/* <div>
+          <FeaturedCollection />
+        </div> */}
       </div>
     </>
   );
