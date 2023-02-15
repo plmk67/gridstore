@@ -71,7 +71,7 @@ const index = () => {
           <Link href="/">GRIDS</Link>
         </div>
         <div className="flex flex-col items-center w-full ">
-          <div className="flex flex-col md:flex-row md:min-w-[850px] md:max-w-[1000px] ">
+          <div className="flex flex-col md:flex-row md:min-w-[850px] md:max-w-[1280px] ">
             <div className="md:hidden">
               <Accordion allowToggle>
                 <AccordionItem>
@@ -159,7 +159,7 @@ const index = () => {
               </div>
               <CheckoutForm />
             </div>
-            <div>
+            <div className="md:w-2/5">
               <div className="invisible md:visible">
                 <div className="flex flex-col">
                   {cartItems.length > 0 &&

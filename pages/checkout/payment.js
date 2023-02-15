@@ -146,7 +146,7 @@ const payment = () => {
                 </AccordionItem>
               </Accordion>
             </div>
-            <div className="pt-4 md:w-3/5  md:pr-8">
+            <div className="pt-4 md:w-3/5 md:pr-8">
               <div className="flex flex-row pb-4">
                 <div className="flex flex-row items-center pr-4 hover:underline">
                   <Link href="/cart">Cart </Link>
