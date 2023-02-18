@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import Link from "next/link";
-
 import StripeCheckoutForm from "../../components/StripeCheckoutForm";
 
 import {
@@ -33,10 +32,27 @@ const payment = () => {
   let shipping_cost = Number(15.0).toFixed(2);
 
   useEffect(() => {
-    console.log("Cart Effects executed");
     let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
     setCartItems(cartItemsList);
   }, []);
+
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    let dataFetch = () => {
+      fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          total: total * 100,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => setClientSecret(data.clientSecret));
+    };
+    if (total > 0) {
+      dataFetch();
+    }
+  }, [total]);
 
   if (cartItems) {
     subtotal = cartItems
@@ -160,7 +176,7 @@ const payment = () => {
                   <Link href="/checkout/payment">Payment</Link>
                 </div>
               </div>
-              <div className="w-full">
+              <div className="">
                 {clientSecret && (
                   <Elements options={options} stripe={stripePromise}>
                     <StripeCheckoutForm />
@@ -168,9 +184,9 @@ const payment = () => {
                 )}
               </div>
             </div>
-            <div>
+            <div className="md:w-2/5">
               <div className="invisible md:visible">
-                <div className="flex flex-col">
+                <div className="flex flex-col ">
                   {cartItems.length > 0 &&
                     cartItems?.map((item, index) => {
                       return (
