@@ -21,7 +21,7 @@ import Link from "next/link";
 const Product = (query) => {
   const { sendRequest, isLoading, setIsLoading } = useHttpClient();
   const { error, setError } = useState(false);
-  const { cartQuantity, setCartQuantity } = useAppContext();
+  const { setCartItems } = useAppContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
@@ -70,24 +70,30 @@ const Product = (query) => {
       quantity = 1;
     }
 
-    //grabs item from cookies
+    //verify from cookies what is currently on the cart
     let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
     let item = { image, product_name, price, quantity };
+
+    //see if item exists on cart
     let itemExists = cartItemsList.find(
       (item) => item.product_name === product_name
     );
 
+    //if exists, replace cart value. else add as new line item
     if (typeof itemExists !== "undefined") {
       let index = cartItemsList.findIndex(
         (item) => item.product_name === product_name
       );
       cartItemsList.splice(index, 1, item);
       localStorage.setItem("cart", JSON.stringify(cartItemsList));
+      setCartItems(cartItemsList);
     } else {
       cartItemsList.push(item);
       localStorage.setItem("cart", JSON.stringify(cartItemsList));
+      setCartItems(cartItemsList);
     }
 
+    //opens toast to add item
     onOpen();
   };
 

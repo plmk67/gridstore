@@ -2,7 +2,6 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import {
   Accordion,
-  Box,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
@@ -14,8 +13,7 @@ import { useAppContext } from "../../context/AppContext";
 import CheckoutForm from "../../components/CheckoutForm";
 
 const index = () => {
-  const { cartItems, setCartItems } = useAppContext();
-  const { clientSecret, setClientSecret } = useAppContext();
+  const { cartItems, setCartItems, setClientSecret } = useAppContext();
 
   let subtotal = Number(0);
   let total = Number(0);
@@ -45,8 +43,6 @@ const index = () => {
   }
 
   useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-
     let dataFetch = () => {
       fetch("/api/create-payment-intent", {
         method: "POST",
@@ -86,7 +82,6 @@ const index = () => {
                     </div>
                     <div className="font-semibold pr-3">${total}</div>
                   </div>
-
                   <AccordionPanel>
                     <div>
                       <div className="flex flex-col">

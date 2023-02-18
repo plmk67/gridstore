@@ -4,8 +4,6 @@ import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
   const { cartQuantity } = useAppContext();
-  console.log("header", cartQuantity);
-
   return (
     <div className="flex justify-between px-8 py-2 w-full">
       <Link href="/">

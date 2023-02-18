@@ -1,4 +1,4 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
 const calculateOrderAmount = (cartItems, tax_rate, shipping_cost) => {
   let total = 0;

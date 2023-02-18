@@ -7,9 +7,12 @@ export function useAppContext() {
 }
 
 export function AppWrapper({ children }) {
+  const [clientSecret, setClientSecret] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [cartQuantity, setCartQuantity] = useState([]);
-  const [clientSecret, setClientSecret] = useState("");
+  const [cartSubtotal, setCartSubtotal] = useState("");
+  const [order, setOrder] = useState();
+  const [shippingRate, setShippingRate] = useState(0);
 
   let subtotal = Number(0);
   let total = Number(0);
@@ -34,17 +37,6 @@ export function AppWrapper({ children }) {
     total = Number(subtotal) + Number(shipping_cost) + Number(tax);
   }
 
-  useEffect(() => {
-    //treat this for an onMountComponent()
-    let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
-    let cartQuantity = cartItemsList.reduce(
-      (total_quantity, item) => Number(total_quantity) + Number(item.quantity),
-      0
-    );
-    setCartItems(cartItemsList);
-    setCartQuantity(cartQuantity);
-  }, []);
-
   return (
     <AppContext.Provider
       value={{
@@ -54,6 +46,12 @@ export function AppWrapper({ children }) {
         setCartQuantity,
         clientSecret,
         setClientSecret,
+        shippingRate,
+        setShippingRate,
+        cartSubtotal,
+        setCartSubtotal,
+        order,
+        setOrder,
       }}
     >
       {children}

@@ -7,18 +7,31 @@ import FeaturedCollection from "../components/FeaturedCollection";
 import { RiDeleteBinLine, RiArrowRightUpLine } from "react-icons/ri";
 
 const cart = () => {
-  const { cartItems, setCartItems } = useAppContext();
-  const { cartQuantity, setCartQuantity } = useAppContext();
+  const {
+    cartItems,
+    cartSubtotal,
+    setCartItems,
+    setCartQuantity,
+    setCartSubtotal,
+  } = useAppContext();
 
   useEffect(() => {
+    //check what was added during browsing session or previous browsing session
     let cartItemsList = JSON.parse(localStorage.getItem("cart") || "[]");
     let cartQuantity = cartItemsList.reduce(
       (total_quantity, item) => Number(total_quantity) + Number(item.quantity),
       0
     );
 
+    let cartSubtotal = cartItemsList.reduce(
+      (total_quantity, item) =>
+        Number(total_quantity) + Number(item.quantity) * Number(item.price),
+      0
+    );
+
     setCartItems(cartItemsList);
     setCartQuantity(cartQuantity);
+    setCartSubtotal(cartSubtotal);
   }, []);
 
   const handleChange = (value, product_name, action) => {
@@ -26,7 +39,6 @@ const cart = () => {
     if (value < 1) {
       value = Number(1);
     }
-
     //max inventory value
     if (value > 25) {
       value = Number(25);
@@ -37,14 +49,12 @@ const cart = () => {
         switch (action) {
           case "INC":
             return { ...item, quantity: Number(item.quantity) + 1 };
-
           case "DEC":
             if (item.quantity > 1) {
               return { ...item, quantity: Number(item.quantity) - 1 };
             } else {
               return item;
             }
-
           default:
             return { ...item, quantity: value };
         }
@@ -52,14 +62,22 @@ const cart = () => {
         return item;
       }
     });
-    localStorage.setItem("cart", JSON.stringify(updatedQuantity));
-    setCartItems(updatedQuantity);
+
+    let updatedCartSubtotal = updatedQuantity.reduce(
+      (total_quantity, item) =>
+        Number(total_quantity) + Number(item.quantity) * Number(item.price),
+      0
+    );
 
     let updatedCartQuantity = updatedQuantity.reduce(
       (total_quantity, item) => Number(total_quantity) + Number(item.quantity),
       0
     );
+
+    localStorage.setItem("cart", JSON.stringify(updatedQuantity));
+    setCartItems(updatedQuantity);
     setCartQuantity(updatedCartQuantity);
+    setCartSubtotal(updatedCartSubtotal);
   };
 
   const deleteItem = (product_name) => {
@@ -68,7 +86,6 @@ const cart = () => {
     );
 
     localStorage.setItem("cart", JSON.stringify(removedItemList));
-
     setCartItems(removedItemList);
 
     let updatedCartQuantity = removedItemList.reduce(
@@ -128,7 +145,7 @@ const cart = () => {
                       quantity,
                     } = item;
 
-                    let retail_price = price.toFixed(2);
+                    let retail_price = price;
                     let subtotal = (retail_price * quantity).toFixed(2);
 
                     return (
@@ -203,7 +220,9 @@ const cart = () => {
             <div className="flex flex-col items-end w-full">
               <div className="flex flex-row items-end pb-2">
                 <div className="pr-8 font-lg">Subtotal</div>
-                <div className="font-lg bold">$45.00 CAD</div>
+                <div className="font-lg bold">
+                  ${Number(cartSubtotal).toFixed(2)} CAD
+                </div>
               </div>
               <div className="text-xs font-light pb-4">
                 Taxes and shipping calculated at checkout
