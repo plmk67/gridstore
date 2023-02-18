@@ -13,7 +13,8 @@ import { useAppContext } from "../../context/AppContext";
 import CheckoutForm from "../../components/CheckoutForm";
 
 const index = () => {
-  const { cartItems, setCartItems, setClientSecret } = useAppContext();
+  const { cartSubtotal, cartItems, setCartItems, setClientSecret } =
+    useAppContext();
 
   let subtotal = Number(0);
   let total = Number(0);
@@ -28,13 +29,7 @@ const index = () => {
   }, []);
 
   if (cartItems) {
-    subtotal = cartItems
-      .reduce(
-        (subtotal, item) =>
-          Number(subtotal) + Number(item.price * item.quantity),
-        0
-      )
-      .toFixed(2);
+    subtotal = Number(cartSubtotal) * 100;
     tax = (
       (Number(subtotal) + Number(shipping_cost)) *
       Number(tax_rate)
@@ -48,7 +43,7 @@ const index = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          total: total * 100,
+          total: subtotal,
         }),
       })
         .then((res) => res.json())
