@@ -1,4 +1,8 @@
 {
-  "presets": ["next/babel"],
-  "plugins": []
+  "presets": ["next/babel", "@babel/preset-react"],
+  "plugins": [],
+
+  "parserOptions": {
+    "requireConfigFile": false
+  }
 }
