@@ -9,8 +9,8 @@ import Link from "next/link";
 import { IoChevronBack } from "react-icons/io5";
 import { useAppContext } from "../context/AppContext";
 
-export default function StripeCheckoutForm() {
-  const { clientSecret, setCartItems } = useAppContext();
+export default function StripeCheckoutForm(props) {
+  const { clientSecret, billingAddress } = useAppContext();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -48,29 +48,33 @@ export default function StripeCheckoutForm() {
     });
   }, [stripe]);
 
+  console.log(billingAddress);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
-      // Stripe.js has not yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
       return;
     }
 
-    setIsLoading(true);
+    fetch(`http://localhost:4000/api/order/billing-address/${props.orderId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        billingAddress: billingAddress,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data.order))
+      .catch((err) => console.log(err));
 
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000/checkout/order/",
+        return_url: `http://localhost:3000/order/${props.orderId}`,
       },
     });
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
+
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.message);
     } else {
@@ -100,7 +104,11 @@ export default function StripeCheckoutForm() {
             Return to information
           </div>
         </Link>
-        <button disabled={isLoading || !stripe || !elements} id="submit">
+        <button
+          disabled={isLoading || !stripe || !elements}
+          id="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
           <span id="button-text">
             {isLoading ? (
               <div className="spinner" id="spinner"></div>

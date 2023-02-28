@@ -14,18 +14,17 @@ const containerStyle = {
   height: "100%",
 };
 
-const Map = (apiKey) => {
-  const { sendRequest, isLoading, setIsLoading } = useHttpClient();
+const Map = (props) => {
+  const { isLoading, setIsLoading } = useHttpClient();
 
-  console.log(apiKey);
   const containerStyle = {
     width: "auto",
     height: "250px",
   };
 
   const center = {
-    lat: 45.495196,
-    lng: -73.58022,
+    lat: props.coordinates[0].latitude,
+    lng: props.coordinates[0].longitude,
   };
 
   const divStyle = {
@@ -59,30 +58,18 @@ const Map = (apiKey) => {
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={{
-              lat: 45.495196,
-              lng: -73.58022,
+              lat: props.coordinates[0].latitude,
+              lng: props.coordinates[0].longitude,
             }}
-            zoom={15}
+            zoom={18}
           >
             <MarkerF
               visible={true}
               position={{
-                lat: 45.495196,
-                lng: -73.58022,
+                lat: props.coordinates[0].latitude,
+                lng: props.coordinates[0].longitude,
               }}
             />
-
-            {/* <InfoWindowF
-              position={{
-                lat: 45.495196,
-                lng: -73.58022,
-              }}
-            >
-              <div className="flex flex-col justify-center items-center w-40 h-10">
-                <div>Shipping address</div>
-                <div>Montreal, Canada</div>
-              </div>
-            </InfoWindowF> */}
           </GoogleMap>
         </LoadScript>
       )}

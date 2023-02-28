@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Link from "next/link";
 import FeaturedCollection from "../components/FeaturedCollection";
 import { RiDeleteBinLine, RiArrowRightUpLine } from "react-icons/ri";
+import { useRouter } from "next/router";
 
 const cart = () => {
   const {
@@ -14,6 +15,8 @@ const cart = () => {
     setCartQuantity,
     setCartSubtotal,
   } = useAppContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     //check what was added during browsing session or previous browsing session
@@ -93,6 +96,52 @@ const cart = () => {
       0
     );
     setCartQuantity(updatedCartQuantity);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    let checkoutSessionId = JSON.parse(
+      localStorage.getItem("checkoutSessionId")
+    );
+
+    if (checkoutSessionId === null) {
+      //creates checkoutSessionId
+      fetch("http://localhost:4000/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lineItems: cartItems,
+        }),
+      })
+        .then((res) => res.json())
+        .then(
+          (data) => (
+            router.push(`/checkout/${data.order.id}`, null, {
+              shallow: true,
+            }),
+            localStorage.setItem(
+              "checkoutSessionId",
+              JSON.stringify(data.order.id)
+            )
+          )
+        );
+    } else {
+      //update lineItems on checkoutSessionId
+      fetch(`http://localhost:4000/api/order/items/${checkoutSessionId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lineItems: cartItems,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) =>
+          router.push(`/checkout/${checkoutSessionId}`, null, {
+            shallow: true,
+          })
+        );
+    }
   };
 
   return (
@@ -227,11 +276,10 @@ const cart = () => {
               <div className="text-xs font-light pb-4">
                 Taxes and shipping calculated at checkout
               </div>
-              <Link href="/checkout">
-                <Button colorScheme="gray" className="w-80">
-                  Check out
-                </Button>
-              </Link>
+
+              <Button onClick={onSubmit} colorScheme="gray" className="w-80">
+                Check out
+              </Button>
             </div>
           </div>
         )}

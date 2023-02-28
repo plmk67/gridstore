@@ -7,19 +7,31 @@ export function useAppContext() {
 }
 
 export function AppWrapper({ children }) {
-  const [clientSecret, setClientSecret] = useState("");
+  const [clientSecret, setClientSecret] = useState();
   const [cartItems, setCartItems] = useState([]);
   const [cartQuantity, setCartQuantity] = useState([]);
   const [cartSubtotal, setCartSubtotal] = useState("");
-  const [order, setOrder] = useState();
+  const [shippingAddress, setShippingAddress] = useState({});
+  const [billingAddress, setBillingAddress] = useState({
+    name: "Jane Doe",
+    address: {
+      line1: "354 Gladstone Avenue",
+      line2: "Apt 123",
+      city: "Ottawa",
+      state: "ON",
+      postal_code: "K2P 0R4",
+      country: "CA",
+    },
+  });
+  const [order, createOrder] = useState();
   const [shippingRate, setShippingRate] = useState(0);
 
   let subtotal = Number(0);
   let total = Number(0);
   let tax = Number(0);
-  let tax_rate = Number(0.13);
+  let taxRate = Number(0.13);
 
-  let shipping_cost = Number(15.0).toFixed(2);
+  let shippingCost = Number(15.0).toFixed(2);
 
   //Calculating Checkout Total
   if (cartItems) {
@@ -30,11 +42,10 @@ export function AppWrapper({ children }) {
         0
       )
       .toFixed(2);
-    tax = (
-      (Number(subtotal) + Number(shipping_cost)) *
-      Number(tax_rate)
-    ).toFixed(2);
-    total = Number(subtotal) + Number(shipping_cost) + Number(tax);
+    tax = ((Number(subtotal) + Number(shippingCost)) * Number(taxRate)).toFixed(
+      2
+    );
+    total = Number(subtotal) + Number(shippingCost) + Number(tax);
   }
 
   return (
@@ -51,7 +62,11 @@ export function AppWrapper({ children }) {
         cartSubtotal,
         setCartSubtotal,
         order,
-        setOrder,
+        createOrder,
+        shippingAddress,
+        setShippingAddress,
+        billingAddress,
+        setBillingAddress,
       }}
     >
       {children}
