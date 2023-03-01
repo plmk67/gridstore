@@ -6,7 +6,7 @@ import { RiCheckboxCircleLine } from "react-icons/ri";
 import Map from "../../components/Map";
 import { config } from "../../constants/constants";
 
-const order = (query) => {
+const order = () => {
   const router = useRouter();
   const URL = config.url;
   const [order, setOrder] = useState([]);
@@ -232,10 +232,6 @@ const order = (query) => {
       )}
     </div>
   );
-};
-
-order.getInitialProps = ({ query }) => {
-  return { query };
 };
 
 export default order;
