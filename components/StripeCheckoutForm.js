@@ -72,7 +72,7 @@ export default function StripeCheckoutForm(props) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `http://localhost:3000/order/${props.orderId}`,
+        return_url: `${URL}/order/${props.orderId}`,
       },
     });
 

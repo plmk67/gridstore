@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Button, CircularProgress } from "@chakra-ui/react";
 import { RiCheckboxCircleLine } from "react-icons/ri";
 import Map from "../../components/Map";
+import { config } from "../../constants/constants";
 
 const order = (query) => {
   const router = useRouter();
+  const URL = config.url;
   const [order, setOrder] = useState([]);
   const [coordinates, setCoordinates] = useState("");
   const [isLoading, setLoading] = useState(true);
