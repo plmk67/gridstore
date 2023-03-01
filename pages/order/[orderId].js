@@ -5,7 +5,7 @@ import { Button, CircularProgress } from "@chakra-ui/react";
 import { RiCheckboxCircleLine } from "react-icons/ri";
 import Map from "../../components/Map";
 
-const order = () => {
+const order = (query) => {
   const router = useRouter();
   const [order, setOrder] = useState([]);
   const [coordinates, setCoordinates] = useState("");
@@ -230,6 +230,10 @@ const order = () => {
       )}
     </div>
   );
+};
+
+order.getInitialProps = ({ query }) => {
+  return { query };
 };
 
 export default order;
