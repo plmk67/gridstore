@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 
 import Link from "next/link";
+import { config } from "../../../constants/constants";
 
 const Product = (query) => {
   const { sendRequest, isLoading, setIsLoading } = useHttpClient();
@@ -28,6 +29,7 @@ const Product = (query) => {
 
   const [product, setProduct] = useState({});
   let id = query.query.id;
+  const URL = config.url;
 
   const { description, image, product_name, price } = product;
 
@@ -48,7 +50,7 @@ const Product = (query) => {
     const fetchProduct = async () => {
       try {
         setIsLoading(true);
-        let res = await sendRequest(`http://localhost:4000/api/products/${id}`);
+        let res = await sendRequest(`${URL}/api/products/${id}`);
         setProduct(res.product);
         setIsLoading(false);
       } catch (err) {

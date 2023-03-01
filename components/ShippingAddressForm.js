@@ -12,11 +12,13 @@ import { Formik, Field, Form, useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { config } from "../constants/constants";
 
 import { IoChevronBack } from "react-icons/io5";
 
 const ShippingAddressForm = (props) => {
   const router = useRouter();
+  const URL = config.url;
   const provinces = [
     "AB",
     "BC",
@@ -107,20 +109,17 @@ const ShippingAddressForm = (props) => {
           },
         };
 
-        fetch(
-          `http://localhost:4000/api/order/shipping-address/${props.orderId}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              shippingAddress: addShippingAddress.shippingAddress,
-              email: email,
-              phoneNumber: phoneNumber,
-              firstName: firstName,
-              lastName: lastName,
-            }),
-          }
-        )
+        fetch(`${URL}/api/order/shipping-address/${props.orderId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            shippingAddress: addShippingAddress.shippingAddress,
+            email: email,
+            phoneNumber: phoneNumber,
+            firstName: firstName,
+            lastName: lastName,
+          }),
+        })
           .then((res) => res.json())
           .then((data) => console.log(data.order));
         router.push(`/checkout/${props.orderId}/payment`, null, {

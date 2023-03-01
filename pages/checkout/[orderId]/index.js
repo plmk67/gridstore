@@ -12,9 +12,11 @@ import {
 import { RiShoppingCart2Line, RiArrowDropRightLine } from "react-icons/ri";
 import { useAppContext } from "../../../context/AppContext";
 import ShippingAddressForm from "../../../components/ShippingAddressForm";
+import { config } from "../../../constants/constants";
 
 const index = (props) => {
   const orderId = props.query.orderId;
+  const URL = config.url;
   const { cartItems, setCartItems, setClientSecret } = useAppContext();
   const [isLoading, setLoading] = useState(true);
 
@@ -43,7 +45,7 @@ const index = (props) => {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`http://localhost:4000/api/order/items/${orderId}`, {
+    fetch(`${URL}/api/order/items/${orderId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })

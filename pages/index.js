@@ -1,9 +1,11 @@
 import Head from "next/head";
 import Header from "../components/Header";
 import ProductCard from "../components/ProductCard";
+import { config } from "../constants/constants";
 
 export const getStaticProps = async () => {
-  const res = await fetch("http://localhost:4000/api/products/");
+  const URL = config.url;
+  const res = await fetch(`${URL}/api/products/`);
   const data = await res.json();
 
   return {

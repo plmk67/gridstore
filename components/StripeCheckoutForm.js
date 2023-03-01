@@ -8,10 +8,11 @@ import {
 import Link from "next/link";
 import { IoChevronBack } from "react-icons/io5";
 import { useAppContext } from "../context/AppContext";
+import { config } from "../constants/constants";
 
 export default function StripeCheckoutForm(props) {
   const { clientSecret, billingAddress } = useAppContext();
-
+  const URL = config.url;
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState(null);
@@ -57,7 +58,7 @@ export default function StripeCheckoutForm(props) {
       return;
     }
 
-    fetch(`http://localhost:4000/api/order/billing-address/${props.orderId}`, {
+    fetch(`${URL}/api/order/billing-address/${props.orderId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

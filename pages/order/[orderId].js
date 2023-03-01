@@ -31,7 +31,7 @@ const order = (query) => {
     }
 
     if (orderId) {
-      fetch(`http://localhost:4000/api/order/${orderId}`, {
+      fetch(`${URL}/api/order/${orderId}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       })

@@ -6,7 +6,7 @@ import Link from "next/link";
 import FeaturedCollection from "../components/FeaturedCollection";
 import { RiDeleteBinLine, RiArrowRightUpLine } from "react-icons/ri";
 import { useRouter } from "next/router";
-
+import { config } from "../constants/constants";
 const cart = () => {
   const {
     cartItems,
@@ -15,6 +15,7 @@ const cart = () => {
     setCartQuantity,
     setCartSubtotal,
   } = useAppContext();
+  const URL = config.url;
 
   const router = useRouter();
 
@@ -107,7 +108,7 @@ const cart = () => {
 
     if (checkoutSessionId === null) {
       //creates checkoutSessionId
-      fetch("http://localhost:4000/api/order", {
+      fetch(`${URL}/api/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -128,7 +129,7 @@ const cart = () => {
         );
     } else {
       //update lineItems on checkoutSessionId
-      fetch(`http://localhost:4000/api/order/items/${checkoutSessionId}`, {
+      fetch(`${URL}/api/order/items/${checkoutSessionId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
