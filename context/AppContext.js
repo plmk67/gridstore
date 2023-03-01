@@ -12,17 +12,7 @@ export function AppWrapper({ children }) {
   const [cartQuantity, setCartQuantity] = useState([]);
   const [cartSubtotal, setCartSubtotal] = useState("");
   const [shippingAddress, setShippingAddress] = useState({});
-  const [billingAddress, setBillingAddress] = useState({
-    name: "Jane Doe",
-    address: {
-      line1: "354 Gladstone Avenue",
-      line2: "Apt 123",
-      city: "Ottawa",
-      state: "ON",
-      postal_code: "K2P 0R4",
-      country: "CA",
-    },
-  });
+  const [billingAddress, setBillingAddress] = useState();
   const [order, createOrder] = useState();
   const [shippingRate, setShippingRate] = useState(0);
 
