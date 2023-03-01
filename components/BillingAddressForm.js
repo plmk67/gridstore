@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from 'react';
 import { AddressElement } from "@stripe/react-stripe-js";
 import { useAppContext } from "../context/AppContext";
 
