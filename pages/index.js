@@ -5,7 +5,9 @@ import { config } from "../constants/constants";
 
 export const getStaticProps = async () => {
   const URL = config.url;
-  const res = await fetch(`${URL}/api/products/`);
+  const res = await fetch(
+    `https://gridstore-backend.herokuapp.com/api/products/`
+  );
   const data = await res.json();
 
   return {

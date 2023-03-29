@@ -15,7 +15,7 @@ const ProductCard = (product, key) => {
   } = product.product;
 
   return (
-    <Link href={`/product/${slug}/${id}`}>
+    <Link href={`/products/${id}`}>
       <div key={key}>
         <img src={image} alt={slug} className="object-fill w-full" />
         <div className="flex flex-col pt-2 font-light">

@@ -163,7 +163,9 @@ const index = (props) => {
                   </div>
                   <RiArrowDropRightLine size={30} />
                   <div className="flex flex-row items-center pr-4 font-medium hover:underline">
-                    <Link href="/checkout">Information </Link>
+                    <Link href={{ pathname: "/checkout", query: orderId }}>
+                      Information
+                    </Link>
                   </div>
                   <RiArrowDropRightLine size={30} />
                   <div className="flex flex-row items-center pr-4 ">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import Header from "../../../components/Header";
-import { useAppContext } from "../../../context/AppContext";
-import { useHttpClient } from "../../../components/http-hook";
+import Header from "../../components/Header";
+import { useAppContext } from "../../context/AppContext";
+import { useHttpClient } from "../../components/http-hook";
 import {
   Button,
   CircularProgress,
@@ -17,10 +17,8 @@ import {
 } from "@chakra-ui/react";
 
 import Link from "next/link";
-import { config } from "../../../constants/constants";
-
-const Product = (query) => {
-  const { sendRequest, isLoading, setIsLoading } = useHttpClient();
+export default function Products(props) {
+  const { isLoading, setIsLoading } = useHttpClient();
   const { error, setError } = useState(false);
   const { setCartItems } = useAppContext();
 
@@ -28,8 +26,6 @@ const Product = (query) => {
   const btnRef = useRef();
 
   const [product, setProduct] = useState({});
-  let id = query.query.id;
-  const URL = config.url;
 
   const { description, image, product_name, price } = product;
 
@@ -47,24 +43,18 @@ const Product = (query) => {
   const input = getInputProps();
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setIsLoading(true);
-        let res = await sendRequest(`${URL}/api/products/${id}`);
-        setProduct(res.product);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-        // toast({
-        //   description: "We've created your account for you.",
-        //   status: "error",
-        //   duration: 9000,
-        //   isClosable: true,
-        // });
-      }
-    };
-    fetchProduct();
-  }, [id]);
+    setIsLoading(true);
+
+    setProduct(props.product.product);
+    setIsLoading(false);
+
+    // toast({
+    //   description: "We've created your account for you.",
+    //   status: "error",
+    //   duration: 9000,
+    //   isClosable: true,
+    // });
+  }, []);
 
   const AddToCart = (quantity) => {
     //set minimal value as 1
@@ -106,15 +96,15 @@ const Product = (query) => {
   }
 
   return (
-    <div className="flex flex-col items-center h-full">
+    <div className="flex flex-col items-center w-full h-full px-2 ">
       <Header />
       {isLoading ? (
         <div className="flex flex-row justify-center items-center h-full ">
           <CircularProgress isIndeterminate />
         </div>
       ) : (
-        <div className="flex flex-col-reverse md:flex-row px-4 pt-12 max-w-[1440px] h-full">
-          <div className="flex flex-col items-end w-full  md:w-1/2">
+        <div className="flex flex-col-reverse md:flex-row pt-12 max-w-[1440px] h-full">
+          <div className="flex flex-col items-end w-full md:w-1/2">
             <div className="flex flex-col md:flex-row">
               <div className="md:w-2/5 md:pl-4 ">
                 <div className="flex flex-row justify-between font-light text-xs pr-8 md:flex-col">
@@ -170,7 +160,7 @@ const Product = (query) => {
               </div>
             </div>
           </div>
-          <div className="flex-row pb-8 w-full md:w-1/2  ">
+          <div className="flex-row pb-8 w-full md:w-1/2 ">
             <img className="w-full" src={image} alt="test image" />
           </div>
         </div>
@@ -183,7 +173,7 @@ const Product = (query) => {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <div className="flex flex-col justify-between  h-full">
+          <div className="flex flex-col justify-between h-full">
             <div>
               <DrawerCloseButton />
               <div className="flex pt-4 px-4 flex-col w-full ">
@@ -223,10 +213,13 @@ const Product = (query) => {
       </Drawer>
     </div>
   );
-};
+}
 
-Product.getInitialProps = ({ query }) => {
-  return { query };
-};
-
-export default Product;
+export async function getServerSideProps({ params }) {
+  const product = await fetch(
+    `https://gridstore-backend.herokuapp.com/api/products/${params.productId}`
+  ).then((res) => res.json());
+  return {
+    props: { product },
+  };
+}
