@@ -17,7 +17,8 @@ import {
 } from "@chakra-ui/react";
 
 import Link from "next/link";
-export default function Products(props) {
+
+export default function Products({ productInfo }) {
   const { isLoading, setIsLoading } = useHttpClient();
   const { error, setError } = useState(false);
   const { setCartItems } = useAppContext();
@@ -25,7 +26,7 @@ export default function Products(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
 
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState(productInfo.product);
 
   const { description, image, product_name, price } = product;
 
@@ -41,20 +42,6 @@ export default function Products(props) {
   const inc = getIncrementButtonProps();
   const dec = getDecrementButtonProps();
   const input = getInputProps();
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    setProduct(props.product.product);
-    setIsLoading(false);
-
-    // toast({
-    //   description: "We've created your account for you.",
-    //   status: "error",
-    //   duration: 9000,
-    //   isClosable: true,
-    // });
-  }, []);
 
   const AddToCart = (quantity) => {
     //set minimal value as 1
@@ -98,73 +85,66 @@ export default function Products(props) {
   return (
     <div className="flex flex-col items-center w-full h-full px-2 ">
       <Header />
-      {isLoading ? (
-        <div className="flex flex-row justify-center items-center h-full ">
-          <CircularProgress isIndeterminate />
-        </div>
-      ) : (
-        <div className="flex flex-col-reverse md:flex-row pt-12 max-w-[1440px] h-full">
-          <div className="flex flex-col items-end w-full md:w-1/2">
-            <div className="flex flex-col md:flex-row">
-              <div className="md:w-2/5 md:pl-4 ">
-                <div className="flex flex-row justify-between font-light text-xs pr-8 md:flex-col">
-                  <div className="pb-8 md:pb-2">
-                    <div className="pb-2">(Dimensions)</div>
-                    <div>Short: 65mm H x 85mm Ø Tall: 95mm H x 85mm Ø</div>
-                  </div>
-                  <div className="md:pb-2">
-                    <div className="pb-2">(Materials)</div>
-                    <div>Porcelain</div>
-                  </div>
-                  <div className="md:pb-2">
-                    <div className="pb-2">(Specifications)</div>
-                    <div>Dishwasher Safe Made in Japan</div>
-                  </div>
+
+      <div className="flex flex-col-reverse md:flex-row pt-12 max-w-[1440px] h-full">
+        <div className="flex flex-col items-end w-full md:w-1/2">
+          <div className="flex flex-col md:flex-row">
+            <div className="md:w-2/5 md:pl-4 ">
+              <div className="flex flex-row justify-between font-light text-xs pr-8 md:flex-col">
+                <div className="pb-8 md:pb-2">
+                  <div className="pb-2">(Dimensions)</div>
+                  <div>Short: 65mm H x 85mm Ø Tall: 95mm H x 85mm Ø</div>
                 </div>
-              </div>
-              <div className="order-first md:order-last md:w-3/5 md:pr-12">
-                <div className="pb-4 md:hidden">{product_name}</div>
-                <div className="pb-2 md:pb-4 font-light text-xs leading-5">
-                  {description}
+                <div className="md:pb-2">
+                  <div className="pb-2">(Materials)</div>
+                  <div>Porcelain</div>
+                </div>
+                <div className="md:pb-2">
+                  <div className="pb-2">(Specifications)</div>
+                  <div>Dishwasher Safe Made in Japan</div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col w-full md:w-3/5 md:pr-12 ">
-              <div className="flex flex-row pb-4 md:pb-4">
-                <div className="flex flex-col justify-between w-1/2 md:w-2/5">
-                  <div className="pb-2 text-xs font-medium">Price</div>
-                  <div>${retail_price}</div>
-                </div>
-                <div className="flex flex-col justify-between w-1/2 md:w-3/5 ">
-                  <div className="pb-2 text-xs font-medium text-center">
-                    Quantity
-                  </div>
-                  <div>
-                    <HStack className="h-8">
-                      <Button {...dec}>-</Button>
-
-                      <Input className="text-center" {...input} width="auto" />
-
-                      <Button {...inc}>+</Button>
-                    </HStack>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full">
-                <Button
-                  onClick={() => AddToCart(input.value)}
-                  className="w-full"
-                >
-                  Add to cart
-                </Button>
+            <div className="order-first md:order-last md:w-3/5 md:pr-12">
+              <div className="pb-4 md:hidden">{product_name}</div>
+              <div className="pb-2 md:pb-4 font-light text-xs leading-5">
+                {description}
               </div>
             </div>
           </div>
-          <div className="flex-row pb-8 w-full md:w-1/2 ">
-            <img className="w-full" src={image} alt="test image" />
+          <div className="flex flex-col w-full md:w-3/5 md:pr-12 ">
+            <div className="flex flex-row pb-4 md:pb-4">
+              <div className="flex flex-col justify-between w-1/2 md:w-2/5">
+                <div className="pb-2 text-xs font-medium">Price</div>
+                <div>${retail_price}</div>
+              </div>
+              <div className="flex flex-col justify-between w-1/2 md:w-3/5 ">
+                <div className="pb-2 text-xs font-medium text-center">
+                  Quantity
+                </div>
+                <div>
+                  <HStack className="h-8">
+                    <Button {...dec}>-</Button>
+
+                    <Input className="text-center" {...input} width="auto" />
+
+                    <Button {...inc}>+</Button>
+                  </HStack>
+                </div>
+              </div>
+            </div>
+            <div className="w-full">
+              <Button onClick={() => AddToCart(input.value)} className="w-full">
+                Add to cart
+              </Button>
+            </div>
           </div>
         </div>
-      )}
+        <div className="flex-row pb-8 w-full md:w-1/2 ">
+          <img className="w-full" src={image} alt="test image" />
+        </div>
+      </div>
+
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -215,11 +195,31 @@ export default function Products(props) {
   );
 }
 
-export async function getServerSideProps({ params }) {
-  const product = await fetch(
-    `https://gridstore-backend.herokuapp.com/api/products/${params.productId}`
-  ).then((res) => res.json());
+export const getStaticPaths = async () => {
+  const res = await fetch(
+    `https://gridstore-backend.herokuapp.com/api/products/`
+  );
+
+  const data = await res.json();
+
+  const paths = data.products.map((product) => {
+    return { params: { productId: product.id } };
+  });
+
   return {
-    props: { product },
+    paths,
+    fallback: true,
   };
-}
+};
+
+export const getStaticProps = async (context) => {
+  const productId = context.params.productId;
+  const res = await fetch(
+    `https://gridstore-backend.herokuapp.com/api/products/${productId}`
+  );
+  const data = await res.json();
+
+  return {
+    props: { productInfo: data },
+  };
+};
