@@ -1,12 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import { HStack, Input, Button } from "@chakra-ui/react";
+import {
+  HStack,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 import Header from "../components/Header";
 import Link from "next/link";
 import FeaturedCollection from "../components/FeaturedCollection";
 import { RiDeleteBinLine, RiArrowRightUpLine } from "react-icons/ri";
 import { useRouter } from "next/router";
 import { config } from "../constants/constants";
+
 const cart = () => {
   const {
     cartItems,
@@ -16,6 +28,8 @@ const cart = () => {
     setCartSubtotal,
   } = useAppContext();
   const URL = config.url;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedItem, setDeleteItem] = useState("empty");
 
   const router = useRouter();
 
@@ -84,6 +98,11 @@ const cart = () => {
     setCartSubtotal(updatedCartSubtotal);
   };
 
+  const deleteModal = (product_name) => {
+    setDeleteItem(product_name);
+    onOpen();
+  };
+
   const deleteItem = (product_name) => {
     let removedItemList = cartItems.filter(
       (item) => item.product_name !== product_name
@@ -97,6 +116,8 @@ const cart = () => {
       0
     );
     setCartQuantity(updatedCartQuantity);
+    onClose();
+    setDeleteItem("");
   };
 
   const onSubmit = (e) => {
@@ -257,7 +278,7 @@ const cart = () => {
                         <td className="h-36 pt-2 align-top text-center">
                           <button
                             className="h-15 w-15"
-                            onClick={() => deleteItem(product_name)}
+                            onClick={() => deleteModal(product_name)}
                           >
                             <RiDeleteBinLine size={20} />
                           </button>
@@ -287,6 +308,29 @@ const cart = () => {
         {/* <div>
           <FeaturedCollection />
         </div> */}
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Delete Item?</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <div>
+                This will remove item permanently. You cannot undo this action.
+              </div>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                colorScheme="red"
+                mr={3}
+                onClick={() => deleteItem(selectedItem)}
+              >
+                Delete
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
     </>
   );
