@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import { useAppContext } from "../../context/AppContext";
 import { useHttpClient } from "../../components/http-hook";
 import {
@@ -144,6 +145,7 @@ export default function Products({ productInfo }) {
           <img className="w-full" src={image} alt="test image" />
         </div>
       </div>
+      <Footer />
       <Drawer
         isOpen={isOpen}
         placement="right"

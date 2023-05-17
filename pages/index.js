@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import { config } from "../constants/constants";
 
@@ -37,6 +38,7 @@ export default function Home({ products }) {
             })}
           </div>
         </div>
+        <Footer />
       </main>
     </>
   );
