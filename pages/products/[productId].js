@@ -144,7 +144,6 @@ export default function Products({ productInfo }) {
           <img className="w-full" src={image} alt="test image" />
         </div>
       </div>
-
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -208,7 +207,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
 };
 
