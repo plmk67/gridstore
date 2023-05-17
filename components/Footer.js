@@ -19,7 +19,6 @@ const Header = () => {
           <div className="pt-4">
             <div className="pt-2">Objects</div>
             <div className="pt-2">Information</div>
-            <div className="pt-2">Closed on all holidays</div>
           </div>
         </div>
       </div>
