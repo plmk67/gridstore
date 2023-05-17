@@ -18,6 +18,8 @@ export default function StripeCheckoutForm(props) {
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(props.orderId);
+
   useEffect(() => {
     if (!stripe) {
       return;
@@ -97,7 +99,7 @@ export default function StripeCheckoutForm(props) {
         </div>
       )}
       <div className="flex flex-row justify-between items-center w-full pt-4">
-        <Link href="/checkout">
+        <Link href={`/checkout/${props.orderId}`}>
           <div className="flex flex-row items-center">
             <div className="pr-1">
               <IoChevronBack size={18} />
