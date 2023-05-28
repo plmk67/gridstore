@@ -20,7 +20,9 @@ export default function Order({ orderInfo }) {
 }
 
 export const getServerSideProps = async () => {
-  const res = await fetch(`http://localhost:4000/api/order/list/`);
+  const res = await fetch(
+    `https://gridstore-backend.herokuapp.com/api/products/`
+  );
   const data = await res.json();
 
   return {
