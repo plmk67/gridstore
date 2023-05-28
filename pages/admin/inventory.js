@@ -1,6 +1,6 @@
 import AdminHeader from "../../components/AdminHeader";
 import Sidebar from "../../components/Sidebar";
-export default function Admin() {
+export default function Inventory() {
   return (
     <div className="flex">
       <Sidebar />

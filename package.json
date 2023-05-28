@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.11.12",
     "@next/font": "13.1.1",
+    "@nextui-org/react": "^1.0.0-beta.13",
     "@react-google-maps/api": "^2.18.1",
     "@stripe/react-stripe-js": "^1.16.4",
     "@stripe/stripe-js": "^1.46.0",

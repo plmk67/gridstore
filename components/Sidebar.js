@@ -28,7 +28,14 @@ const Sidebar = () => {
           <div className="ml-4 pr-2">
             <MdInventory />
           </div>
-          <Link href="/admin">Inventory</Link>
+          <Link href="/admin/inventory">Inventory</Link>
+        </div>
+
+        <div className="flex flex-row items-center mt-2 hover:bg-neutral-400 transition h-10 ">
+          <div className="ml-4 pr-2">
+            <MdInventory />
+          </div>
+          <Link href="/admin/products">Products</Link>
         </div>
 
         <div className="flex flex-row items-center mt-2  hover:bg-neutral-400 transition h-10">
