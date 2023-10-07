@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
 
-const Header = () => {
+const Footer = () => {
   return (
     <div className="flex flex-col min-[880px]:flex-row max-[880px]:mt-8 justify-between px-8 py-8 w-full bg-zinc-100 ">
-      <div className="flex flex-row   w-full justify-between ">
+      <div className="flex flex-row  w-full justify-between ">
         <div className="text-xs w-1/2">
           <div>(Store Hours)</div>
           <div className="pt-4">
@@ -54,4 +54,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Footer;
