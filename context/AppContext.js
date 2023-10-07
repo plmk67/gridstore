@@ -2,9 +2,12 @@ import React, { useContext, useState, createContext, useEffect } from "react";
 
 const AppContext = createContext();
 
+//allows useContext in any components
 export function useAppContext() {
   return useContext(AppContext);
 }
+
+//wrapper that wraps over the main App
 
 export function AppWrapper({ children }) {
   const [clientSecret, setClientSecret] = useState();

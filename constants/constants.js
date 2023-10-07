@@ -1,5 +1,5 @@
 const production = {
-  url: "https://gridstore-backend.herokuapp.com",
+  url: "http://localhost:4000",
 };
 const development = {
   url: "http://localhost:4000",

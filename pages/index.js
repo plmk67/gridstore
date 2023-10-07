@@ -6,10 +6,10 @@ import { config } from "../constants/constants";
 
 export const getStaticProps = async () => {
   const URL = config.url;
-  const res = await fetch(
-    `https://gridstore-backend.herokuapp.com/api/products/`
-  );
+  const res = await fetch(`http://localhost:4000/api/products/`);
   const data = await res.json();
+
+  //  `https://gridstore-backend.herokuapp.com/api/products/`
 
   return {
     props: { products: data },
@@ -30,9 +30,8 @@ export default function Home({ products }) {
       </Head>
       <main className="flex flex-col static items-center h-screen min-w-[375px] ">
         <Header />
-
-        <div className="h-5/6 ">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-8">
+        <div className=" ">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mx-8 pb-8">
             {products.products.map((product, index) => {
               return <ProductCard product={product} index={index} />;
             })}

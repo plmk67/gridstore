@@ -74,7 +74,7 @@ export default function StripeCheckoutForm(props) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `https://gridstore-d785.vercel.app/order/${props.orderId}`,
+        return_url: `http://localhost:3000/order/${props.orderId}`,
       },
     });
 

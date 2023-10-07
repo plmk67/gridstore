@@ -50,6 +50,7 @@ const cart = () => {
     setCartItems(cartItemsList);
     setCartQuantity(cartQuantity);
     setCartSubtotal(cartSubtotal);
+    console.log(cartSubtotal);
   }, []);
 
   const handleChange = (value, product_name, action) => {

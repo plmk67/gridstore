@@ -197,9 +197,9 @@ export default function Products({ productInfo }) {
 }
 
 export const getStaticPaths = async () => {
-  const res = await fetch(
-    `https://gridstore-backend.herokuapp.com/api/products/`
-  );
+  const res = await fetch(`http://localhost:4000/api/products/`);
+
+  // `https://gridstore-backend.herokuapp.com/api/products/`
 
   const data = await res.json();
 
@@ -215,9 +215,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (context) => {
   const productId = context.params.productId;
-  const res = await fetch(
-    `https://gridstore-backend.herokuapp.com/api/products/${productId}`
-  );
+  const res = await fetch(`http://localhost:4000/api/products/${productId}`);
   const data = await res.json();
 
   return {
